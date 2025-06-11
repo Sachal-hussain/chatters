@@ -1,0 +1,322 @@
+ <!-- JAVASCRIPT -->
+<script src="../assets/libs/jquery/jquery.min.js"></script>
+<script src="../assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/libs/metismenu/metisMenu.min.js"></script>
+<script src="../assets/libs/simplebar/simplebar.min.js"></script>
+<script src="../assets/libs/node-waves/waves.min.js"></script>
+<script src="../assets/libs/feather-icons/feather.min.js"></script>
+<!-- pace js -->
+<script src="../assets/libs/pace-js/pace.min.js"></script>
+
+
+<!-- Plugins js-->
+<!-- <script src="../assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="../assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script> -->
+<!-- dashboard init -->
+
+<!-- apexcharts -->
+<script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+
+
+<script src="../assets/js/app.js"></script>
+<script src="../assets/js/main.js"></script>
+<script src="../assets/js/paste.js"></script>
+<script src="../assets/js/multiselect.min.js"></script>
+<script src="js/reports.js"></script>
+<script src="js/redeem.js"></script>
+<script src="js/editable.js"></script>
+<script src="js/jquery.tabledit.js"></script>
+
+<script src="js/datetimepicker.min.js"></script>
+
+
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
+<!-- Buttons examples -->
+<script src="../assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+<script src="../assets/libs/jszip/jszip.min.js"></script>
+<script src="../assets/libs/pdfmake/build/pdfmake.min.js"></script>
+<script src="../assets/libs/pdfmake/build/vfs_fonts.js"></script>
+<script src="../assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="../assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="../assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/fixedheader/3.2.1/js/dataTables.fixedHeader.min.js"></script>
+<!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+
+<script>
+    $(document).ready(function () {
+        $('#shuffling_tble').DataTable({
+            "order": [[0, 'desc']],
+        });
+        // $('#redeemlimit_tbl').DataTable({
+        //     "order": [[0, 'desc']],
+        // });
+        // $('#unprocess_tble').DataTable({
+        //     "order": [[0, 'desc']],
+        // });
+        $('#shiftrecords').DataTable({
+            "order": [[0, 'asc']],
+            "pageLength": 50,
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false
+        });
+        $('#tbl-reports').DataTable({
+            "order": [[0, 'asc']],
+        });
+        $('#tbl_pagesrecords').DataTable({
+            scrollX: true,
+            fixedHeader: {
+                header: true,
+                headerOffset: $('#page-topbar').outerHeight()
+            },
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape', // Change to landscape orientation
+                    pageSize: 'A3',           // Use A3 page size to fit more columns
+                    exportOptions: {
+                        columns: ':visible'   // Export only visible columns
+                    },
+                    customize: function (doc) {
+                        doc.defaultStyle.fontSize = 8; // Adjust the font size for better fitting
+                        doc.styles.tableHeader.fontSize = 10; // Adjust the font size of headers
+                        doc.styles.title = {
+                            fontSize: 12,
+                            alignment: 'center'
+                        };
+                    }
+                },
+                'print'
+            ],
+            pageLength: 50,
+            order: [[0, 'asc']]
+        });
+
+        // $('#tbl_singlepagesrecord').DataTable({
+        //     "order": [[0, 'asc']],
+            
+        //     scrollX: true
+
+        // });
+
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        function initializeDataTable(tableId) {
+            $(tableId).DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape', // Change to landscape orientation
+                        pageSize: 'A3',           // Use A3 page size to fit more columns
+                        exportOptions: {
+                            columns: ':visible'   // Export only visible columns
+                        },
+                        customize: function (doc) {
+                            doc.defaultStyle.fontSize = 8; // Adjust font size for better fitting
+                            doc.styles.tableHeader.fontSize = 10; // Adjust font size of headers
+                            doc.styles.title = {
+                                fontSize: 12,
+                                alignment: 'center'
+                            };
+                        }
+                    },
+                    'print'
+                ],
+                pageLength: 50,
+                order: [[0, 'asc']]
+            });
+        }
+
+        // Initialize DataTables for all three tables with customized PDF export
+        initializeDataTable('#morning_tbl');
+        initializeDataTable('#evening_tbl');
+        initializeDataTable('#night_tbl');
+        $('#issues_list').DataTable({
+            "order": [[0, 'desc']],
+        });
+        
+        $(document).on('click','.edit_user_status',function(){
+            $('#updateuserstatusmodal').modal('show');
+            var user_id= $(this).data('id');
+            var status= $(this).data('status');
+            var shift= $(this).data('shift');
+            var pg_id= $(this).data('pg_id');
+            // alert(pg_id);
+            $('#user_id').val(user_id);
+            $('#shift').val(shift);
+            $('#status').val(status);
+            // $('#pgid').val(pg_id);
+
+            
+        });
+        $('#pgid').multiselect({
+            includeSelectAllOption: true,
+            enableFiltering: true,
+            onSelectAll: function () {
+                // Manually handle "Select All" selection
+                var selectedValues = $('#pgid').val();
+                if (selectedValues.indexOf('selectAll') !== -1) {
+                    // If "Select All" is selected, include all other options
+                    selectedValues = $('#pgid option').map(function () {
+                        return this.value;
+                    }).get();
+                }
+
+                // Your logic using selectedValues...
+                console.log("Selected All: " + selectedValues.join(', '));
+            },
+            onDeselectAll: function () {
+                // Manually handle "Select All" deselection
+                var selectedValues = $('#pgid').val();
+                if (selectedValues.indexOf('selectAll') !== -1) {
+                    // If "Select All" is deselected, include all other options
+                    selectedValues = [];
+                }
+
+                // Your logic using selectedValues...
+                console.log("Deselected All: " + selectedValues.join(', '));
+            },
+            onSelect: function () {
+                // Handle individual selection
+                var selectedValues = $('#pgid').val();
+                
+                // Check if "selectAll" is in the selected values and update accordingly
+                if (selectedValues.indexOf('selectAll') !== -1) {
+                    // Handle the case when "selectAll" is selected along with individual options
+                    // Your logic here...
+                    console.log("Selected All along with individual options: " + selectedValues.join(', '));
+                } else {
+                    // Handle the case when only individual options are selected
+                    // Your logic here...
+                    console.log("Selected individual options: " + selectedValues.join(', '));
+                }
+            },
+            onDeselect: function () {
+                // Handle individual deselection
+                var selectedValues = $('#pgid').val();
+                
+                // Check if "selectAll" is in the selected values and update accordingly
+                if (selectedValues.indexOf('selectAll') !== -1) {
+                    // Handle the case when "selectAll" is deselected along with individual options
+                    // Your logic here...
+                    console.log("Deselected All along with individual options: " + selectedValues.join(', '));
+                } else {
+                    // Handle the case when only individual options are deselected
+                    // Your logic here...
+                    console.log("Deselected individual options: " + selectedValues.join(', '));
+                }
+            }
+        });
+
+        // issues action modal 
+        $(document).on('click','.issuesaction',function(){
+            $('#issuesactionmdl').modal('show');
+            var user_id     = $(this).data('id');
+            var status      = $(this).data('status');
+            var shift       = $(this).data('shift');
+            var pgname      = $(this).data('pgname');
+            var fullname    = $(this).data('fullname');
+            // alert(pg_id);
+            $('#agent_name').val(fullname);
+            $('#pagename').val(pgname);
+            $('.agentshift').val(shift);
+        });
+
+        // update issues action
+        $(document).on('click','.edit_issues',function(){
+            var id= $(this).data('id');
+            // alert(id);
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'id',
+                value: id
+            }).appendTo('#updateissuefrm');
+
+            // Submit the form
+            $('#updateissuefrm').submit();
+            
+        });
+
+        $(document).on('click','.offday_status',function(){
+            $('#updateoffday_mdl').modal('show');
+            var id= $(this).data('id');
+            $('#userid').val(id);
+        });
+    });
+</script>
+<!-- <script>
+    // disable right click
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    document.onkeydown = function (e) {
+
+        // disable F12 key
+        if(e.keyCode == 123) {
+            return false;
+        }
+
+        // disable I key
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 73){
+            return false;
+        }
+
+        // disable J key
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 74) {
+            return false;
+        }
+
+        // disable U key
+        if(e.ctrlKey && e.keyCode == 85) {
+            return false;
+        }
+    }
+
+</script> -->
+
+<script>
+    // Function to update user status
+    function updateUserStatus() {
+        // Replace the following with your actual server URL and update logic
+        fetch('../update_user_status.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('User status updated:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Function to check the time and run updateUserStatus at 4 PM
+    function checkTimeAndUpdateStatus() {
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+
+        // Check if current time is 4 PM (16:00) and minutes are 0
+        if ((hours === 18 || hours === 2 || hours === 10) && minutes === 0) {
+            updateUserStatus();
+        }
+    }
+
+    // Set interval to check every minute
+    setInterval(checkTimeAndUpdateStatus, 60000); // 60000 ms = 1 minute
+
+    // Run the check immediately when the script is loaded
+    checkTimeAndUpdateStatus();
+</script>
